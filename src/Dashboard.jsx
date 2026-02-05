@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import IndicatorCard from './IndicatorCard';
 import Selector from './Selector';
+import Chart from './Chart';
 import './Dashboard.css'
 
 function Dashboard() {
@@ -47,6 +48,9 @@ function Dashboard() {
       </section>
       <section id='selector'>
         <Selector selector={selector} setSelector={setSelector}/>
+      </section>
+      <section>
+        <Chart topic={selector} value={data[selector].alldata} />
       </section>
     </>
   )

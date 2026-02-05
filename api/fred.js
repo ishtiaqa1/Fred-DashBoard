@@ -10,6 +10,13 @@ app.use(express.json());
 
 const FRED_API_KEY = process.env.FRED_API_KEY;
 
+const PORT = 3001;
+
+app.listen(PORT, () => {
+    console.log(`server running on http;//localhost:${PORT}/`);
+});
+
+
 const getData = async (req,res) => {
     try {
         const {seriesID} = req.params;
@@ -38,8 +45,3 @@ const getData = async (req,res) => {
 
 app.get('/api/series/:seriesID', getData);
 
-const PORT = 3001;
-
-app.listen(PORT, () => {
-    console.log(`server running on http;//localhost:${PORT}/`);
-});
