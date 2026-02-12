@@ -35,7 +35,8 @@ function Dashboard() {
       setLoading(false);
     });
   }, []);
-
+  // console.log(data.interestRate, 'interest rate');
+  // console.log(data.gdp, 'gdp')
   if (loading) return <div>Loading...</div>;
   return (
     <>
@@ -50,7 +51,7 @@ function Dashboard() {
         <Selector selector={selector} setSelector={setSelector}/>
       </section>
       <section>
-        <Chart topic={selector} value={data[selector].alldata} />
+        <Chart value={data[selector]} selector={selector.toString()} /> 
       </section>
     </>
   )

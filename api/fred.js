@@ -31,6 +31,9 @@ const getData = async (req,res) => {
                 }
             }
         );
+        if (!response.ok) {
+            throw Error('Failed to fetch')
+        }
         const alldata = response.data.observations;
         const latest = alldata[alldata.length-1];
 
