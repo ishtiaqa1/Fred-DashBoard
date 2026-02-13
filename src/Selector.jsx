@@ -11,7 +11,7 @@ function Selector({selector, setSelector}) {
                 <option value='gdp'>GDP</option>
                 <option value='unemployment'>Uneployment Rate</option>
                 <option value='inflation'>Inflation Rate</option>
-                <option value='inflationRate'>Interest Rate</option>
+                <option value='interestRate'>Interest Rate</option>
             </select>
         </label>
     </>

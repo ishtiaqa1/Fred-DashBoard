@@ -2,9 +2,10 @@ import React from 'react'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { Line } from 'react-chartjs-2';
  
-function Chart(props, selector) {
-    console.log(props, 'props');
-    
+function Chart(props) {
+    if (!props.value || !props.value.alldata) {
+        return <div>No data available</div>;
+    }
     const label = props.value.alldata.map((v) => v.date);
     const values = props.value.alldata.map((v) => v.value);
     return (
@@ -13,7 +14,7 @@ function Chart(props, selector) {
                 data = {{
                     labels: label,
                     datasets: [{
-                        label: selector,
+                        label: props.selector,
                         data: values
                     }]
                 }}

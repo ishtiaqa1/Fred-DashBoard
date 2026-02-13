@@ -13,13 +13,26 @@ function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [selector, setSelector] = useState('gdp');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     Promise.all([
-      fetch('http://localhost:3001/api/series/GDP').then(r => r.json()),
-      fetch('http://localhost:3001/api/series/UNRATE').then(r => r.json()),
-      fetch('http://localhost:3001/api/series/FPCPITOTLZGUSA').then(r => r.json()),
-      fetch('http://localhost:3001/api/series/DFF').then(r => r.json())
+      fetch('http://localhost:3001/api/series/GDP').then(r => {
+        if (!r.ok) throw new Error('GDP fetch failed');
+        return r.json();
+      }),
+      fetch('http://localhost:3001/api/series/UNRATE').then(r => {
+        if (!r.ok) throw new Error('UNRATE fetch failed');
+        return r.json();
+      }),
+      fetch('http://localhost:3001/api/series/FPCPITOTLZGUSA').then(r => {
+        if (!r.ok) throw new Error('Inflation fetch failed');
+        return r.json();
+      }),
+      fetch('http://localhost:3001/api/series/DFF').then(r => {
+        if (!r.ok) throw new Error('Interest rate fetch failed');
+        return r.json();
+      })
     ])
     .then(([gdp, unemployment, inflation, interestRate]) => {
       setData({
@@ -32,12 +45,14 @@ function Dashboard() {
     })
     .catch(error => {
       console.error('Error fetching data:', error);
+      setError(error.message)
       setLoading(false);
     });
   }, []);
   // console.log(data.interestRate, 'interest rate');
   // console.log(data.gdp, 'gdp')
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>
   return (
     <>
       <h1>US Economic Dashboard</h1>
@@ -51,7 +66,7 @@ function Dashboard() {
         <Selector selector={selector} setSelector={setSelector}/>
       </section>
       <section>
-        <Chart value={data[selector]} selector={selector.toString()} /> 
+        <Chart value={data[selector]} selector={selector.toString().toUpperCase()} /> 
       </section>
     </>
   )
