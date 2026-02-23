@@ -14,17 +14,17 @@ app.use(cors({
 app.use(express.json());
 
 const FRED_API_KEY = process.env.FRED_API_KEY;
+const EXCHANGE_API_KEY = process.env.EXCHANGE_RATE_API_KEY;
 const PORT = 3001;
 
-if (!FRED_API_KEY) {
-    console.error('ERROR: FRED_API_KEY not found in .env file!');
+if (!FRED_API_KEY || !EXCHANGE_API_KEY) {
+    console.error('ERROR: API key not found in .env file!');
     process.exit(1);
 }
 
-const getData = async (req, res) => {
+const getFredData = async (req, res) => {
     try {
         const {seriesID} = req.params;
-        console.log(`Fetching series: ${seriesID}`);
         
         const response = await axios.get(
             `https://api.stlouisfed.org/fred/series/observations`,
@@ -54,7 +54,35 @@ const getData = async (req, res) => {
     }
 }
 
-app.get('/api/series/:seriesID', getData);
+// const getExchangeData = async (req, res) => {
+//     try {
+//         const response = await axios.get(
+//             `http://api.exchangerate.host/live`,
+//             {
+//                 params: {
+//                     access_key: EXCHANGE_API_KEY,
+//                     file_type: 'json'
+//                 }
+//             }
+//         );
+        
+//         const alldata = response.quotes;
+        
+//         return res.json({
+//             alldata: alldata
+//         });
+        
+//     } catch (error) { 
+//         console.error('Error:', error.message);
+//         return res.status(500).json({ 
+//             error: 'Failed to fetch data',
+//             message: error.message 
+//         });
+//     }
+// }
+
+app.get('/api/series/:seriesID', getFredData);
+// app.get('/live', getExchangeData);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}/`);

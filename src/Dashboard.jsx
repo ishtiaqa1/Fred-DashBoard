@@ -3,6 +3,8 @@ import IndicatorCard from './IndicatorCard';
 import Selector from './Selector';
 import Chart from './Chart';
 import './Dashboard.css'
+import './Exchange.jsx'
+import Exchange from './Exchange.jsx';
 
 function Dashboard() {
   const [data, setData] = useState({
@@ -67,6 +69,9 @@ function Dashboard() {
       </section>
       <section>
         <Chart value={data[selector]} selector={selector.toString().toUpperCase()} /> 
+      </section>
+      <section>
+        <Exchange />
       </section>
     </>
   )
