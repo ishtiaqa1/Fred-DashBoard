@@ -4,6 +4,7 @@ import Selector from './Selector.jsx';
 import Chart from './Chart.jsx';
 import './Dashboard.css'
 import Exchange from './Exchange.jsx';
+import Footer from './Footer.jsx';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 800;
@@ -119,6 +120,9 @@ function Dashboard() {
       </section>
       <section>
         <Exchange />
+      </section>
+      <section>
+        <Footer />
       </section>
     </>
   );
