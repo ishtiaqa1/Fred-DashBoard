@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: '*',
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -15,9 +15,9 @@ app.use(express.json());
 
 const FRED_API_KEY = process.env.FRED_API_KEY;
 const EXCHANGE_API_KEY = process.env.EXCHANGE_RATE_API_KEY;
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-if (!FRED_API_KEY || !EXCHANGE_API_KEY) {
+if (!FRED_API_KEY) {
     console.error('ERROR: API key not found in .env file!');
     process.exit(1);
 }
