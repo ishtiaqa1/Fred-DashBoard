@@ -15,19 +15,18 @@ Built as a personal portfolio project to demonstrate full-stack development skil
 
 ## Deployment & Demo
 
-**Live Deployment:** [Insert deployment link here (Soon)]
+**Live Deployment:** [https://freddashboard.vercel.app](https://freddashboard.vercel.app)
 
 - **Project Screenshots:**
-  - Screenshot 1
-  - Screenshot 2
+  - ![Dashboard Screenshot](assets/freddashboard.png)
 
 ---
 
 ## Tech Stack
 
 **Frontend:**
-- React
-- Chart.js
+- React (Vite)
+- Chart.js / react-chartjs-2
 - CSS
 
 **Backend:**
@@ -41,6 +40,7 @@ Built as a personal portfolio project to demonstrate full-stack development skil
 - Axios — HTTP requests to FRED API
 - dotenv — Environment variable management
 - cors — Cross-origin resource sharing
+- react-icons — Social/footer icons
 
 **Development Tools:**
 - Git & GitHub
@@ -57,38 +57,56 @@ Built as a personal portfolio project to demonstrate full-stack development skil
 
 ### Installation Steps
 
+This is a monorepo with separate `client/` and `server/` folders, each with their own `package.json`.
+
 1. **Clone the repository:**
    ```bash
-   git clone [repository-url]
-   cd Fred-Dashboard
+   git clone https://github.com/ishtiaqa1/Fred-DashBoard
+   cd Fred-DashBoard
    ```
 
-2. **Install dependencies:**
-
+2. **Install backend dependencies:**
    ```bash
+   cd server
    npm install
    ```
 
-3. **Environment Setup:**
+3. **Install frontend dependencies:**
    ```bash
+   cd ../client
+   npm install
+   ```
+
+4. **Backend environment setup:**
+   ```bash
+   cd ../server
    cp .env.example .env
    ```
-   Add the following to your `.env` file:
+   Add the following to `server/.env`:
    ```
    FRED_API_KEY=your_api_key_here
    ```
 
-4. **Start the backend server:**
-   ```bash
-   npm run server
+5. **Frontend environment setup:**
+
+   Create `client/.env.development`:
+   ```
+   VITE_API_URL=http://localhost:3001
    ```
 
-5. **Start the frontend:**
+6. **Start the backend server:**
    ```bash
+   cd server
+   npm start
+   ```
+
+7. **Start the frontend (in a separate terminal):**
+   ```bash
+   cd client
    npm run dev
    ```
 
-6. **Access the application:**
+8. **Access the application:**
    Open your browser and navigate to `http://localhost:5173`
 
 ---
@@ -152,11 +170,11 @@ We welcome contributions! Please follow these guidelines:
 
 **Examples:**
 ```
-feat: add CPI chart component
-fix: resolve FRED API rate limit error
-update: improve interest rate data formatting
-style: update dashboard layout for mobile
-delete: remove unused API helper functions
+feat: add social footer with GitHub and LinkedIn links
+fix: resolve CORS mismatch between Vercel and Render
+update: improve error handling with retry logic
+style: redesign dashboard with terminal aesthetic
+delete: remove unused Exchange component placeholders
 ```
 
 ---
