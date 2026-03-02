@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: 'https://freddashboard.vercel.app',
   methods: ['GET', 'POST'],
   credentials: true
 }));
