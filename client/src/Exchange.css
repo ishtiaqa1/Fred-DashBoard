@@ -1,0 +1,97 @@
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem 1.75rem;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.panel-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary);
+}
+
+.panel-sub {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.panel-loading, .panel-error {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 1rem 0;
+}
+.panel-error { color: var(--red); }
+
+/* FX grid */
+.fx-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+}
+
+@media (max-width: 900px) { .fx-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .fx-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.fx-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.fx-card:hover {
+  border-color: var(--border-bright);
+  background: var(--bg-card-hover);
+}
+
+.fx-flag { font-size: 1.1rem; line-height: 1; }
+
+.fx-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.fx-code {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+}
+
+.fx-name {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fx-rate {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}

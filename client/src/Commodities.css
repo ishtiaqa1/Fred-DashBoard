@@ -1,0 +1,61 @@
+.commodity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) { .commodity-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .commodity-grid { grid-template-columns: 1fr; } }
+
+.commodity-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.85rem 1rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.commodity-card:hover {
+  border-color: var(--border-bright);
+  background: var(--bg-card-hover);
+}
+
+.commodity-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.commodity-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.commodity-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.commodity-price {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.commodity-meta {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}

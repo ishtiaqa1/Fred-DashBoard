@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler } from 'chart.js/auto'
+import 'chart.js/auto'
 import { Line } from 'react-chartjs-2';
 
 function Chart(props) {

@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 import IndicatorCard from './IndicatorCard.jsx';
 import Selector from './Selector.jsx';
 import Chart from './Chart.jsx';
-import './Dashboard.css'
 import Exchange from './Exchange.jsx';
+import Crypto from './Crypto.jsx';
+import Commodities from './Commodities.jsx';
 import Footer from './Footer.jsx';
+import './Dashboard.css'
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 800;
@@ -14,27 +16,39 @@ async function fetchWithRetry(url, retries = MAX_RETRIES) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       const text = await response.text();
-      if (!text || text.trim() === '') {
-        throw new Error(`Empty response from ${url}`);
-      }
+      if (!text || text.trim() === '') throw new Error(`Empty response from ${url}`);
       try {
         return JSON.parse(text);
       } catch {
         throw new Error(`Invalid JSON from ${url}`);
       }
     } catch (err) {
-      const isLastAttempt = attempt === retries;
-      if (isLastAttempt) {
-        throw err;
-      }
-      console.warn(`Attempt ${attempt} failed for ${url}: ${err.message}. Retrying in ${RETRY_DELAY_MS * attempt}ms...`);
+      if (attempt === retries) throw err;
+      console.warn(`Attempt ${attempt} failed: ${err.message}. Retrying...`);
       await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * attempt));
     }
   }
+}
+
+function formatGDP(value) {
+  if (!value) return 'N/A';
+  const billions = parseFloat(value);
+  if (billions >= 1000) {
+    return '$' + (billions / 1000).toFixed(2) + 'T';
+  }
+  return '$' + billions.toFixed(0) + 'B';
+}
+
+function computeInflationYoY(inflationData) {
+  if (!inflationData?.alldata || inflationData.alldata.length < 13) return null;
+  const all = inflationData.alldata;
+  const latest = all[all.length - 1];
+  const yearAgo = all[all.length - 13];
+  if (!latest || !yearAgo) return null;
+  const pct = ((parseFloat(latest.value) - parseFloat(yearAgo.value)) / parseFloat(yearAgo.value)) * 100;
+  return { value: pct.toFixed(2), date: latest.date };
 }
 
 function Dashboard() {
@@ -42,7 +56,7 @@ function Dashboard() {
     gdp: null,
     unemployment: null,
     inflation: null,
-    interestRate: null
+    interestRate: null,
   });
   const [loading, setLoading] = useState(true);
   const [selector, setSelector] = useState('gdp');
@@ -54,7 +68,7 @@ function Dashboard() {
     Promise.all([
       fetchWithRetry(`${API_URL}/api/series/GDP`),
       fetchWithRetry(`${API_URL}/api/series/UNRATE`),
-      fetchWithRetry(`${API_URL}/api/series/FPCPITOTLZGUSA`),
+      fetchWithRetry(`${API_URL}/api/series/CPIAUCSL`),
       fetchWithRetry(`${API_URL}/api/series/DFF`),
     ])
     .then(([gdp, unemployment, inflation, interestRate]) => {
@@ -68,9 +82,7 @@ function Dashboard() {
     });
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   if (loading) return <div className="loading-state">FETCHING LIVE DATA</div>;
 
@@ -90,11 +102,14 @@ function Dashboard() {
         <h1 className="dashboard-title">US Economic Dashboard</h1>
         <p className="dashboard-subtitle">FRED / Federal Reserve Economic Data · Live</p>
       </div>
+
+      {/* Macro indicators */}
       <section id="cards">
         <IndicatorCard
           title="Gross Domestic Product"
-          value={'$' + data.gdp?.latest?.value}
+          value={formatGDP(data.gdp?.latest?.value)}
           date={data.gdp?.latest?.date}
+          note="Billions USD (FRED)"
         />
         <IndicatorCard
           title="Unemployment"
@@ -102,9 +117,10 @@ function Dashboard() {
           date={data.unemployment?.latest?.date}
         />
         <IndicatorCard
-          title="Inflation"
-          value={Number(data.inflation?.latest?.value).toFixed(2) + '%'}
-          date={data.inflation?.latest?.date}
+          title="Inflation (YoY)"
+          value={computeInflationYoY(data.inflation) ? computeInflationYoY(data.inflation).value + '%' : 'N/A'}
+          date={computeInflationYoY(data.inflation)?.date}
+          note="CPI YoY % change (CPIAUCSL)"
         />
         <IndicatorCard
           title="Interest Rate"
@@ -112,15 +128,30 @@ function Dashboard() {
           date={data.interestRate?.latest?.date}
         />
       </section>
+
+      {/* Historical chart */}
       <section id="selector">
         <Selector selector={selector} setSelector={setSelector} />
       </section>
       <section>
         <Chart value={data[selector]} selector={selector.toString().toUpperCase()} />
       </section>
+
+      {/* Exchange rates */}
       <section>
         <Exchange />
       </section>
+
+      {/* Commodities */}
+      <section>
+        <Commodities />
+      </section>
+
+      {/* Crypto */}
+      <section>
+        <Crypto />
+      </section>
+
       <section>
         <Footer />
       </section>
